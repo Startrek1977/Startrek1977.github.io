@@ -573,3 +573,32 @@ section:last-of-type {
   font-size: 0.78rem;
   color: var(--text-faint);
 }
+
+/* ---- Rendering performance ----
+   Below-the-fold sections are skipped from layout/paint/style work
+   until they're scrolled near the viewport. `auto` in the second
+   value tells the browser to remember the real rendered size after
+   first paint, so the placeholder height (1000px) only affects the
+   very first render and won't cause layout shift afterwards.
+   Unsupported browsers (no content-visibility) simply ignore this
+   and render normally — safe progressive enhancement. */
+#skills,
+#experience,
+#education {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1000px;
+}
+
+/* Closer size estimates per breakpoint reduce layout shift on first
+   scroll-into-view (the 1000px above is just the mid-range fallback). */
+@media (min-width: 900px) {
+  #skills { contain-intrinsic-size: auto 1150px; }
+  #experience { contain-intrinsic-size: auto 1500px; }
+  #education { contain-intrinsic-size: auto 800px; }
+}
+
+@media (max-width: 600px) {
+  #skills { contain-intrinsic-size: auto 2400px; }
+  #experience { contain-intrinsic-size: auto 3300px; }
+  #education { contain-intrinsic-size: auto 1200px; }
+}
