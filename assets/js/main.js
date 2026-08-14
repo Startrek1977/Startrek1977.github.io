@@ -1,6 +1,7 @@
 /**
  * Roman Idov — Portfolio
- * Plain JS, no dependencies. Handles fade-in-on-load only today.
+ * Plain JS, no dependencies. Handles fade-in-on-load and
+ * scroll-triggered reveal animations.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
    SWAPPABLE WIDGETS (future: live terminal effects)
 
    Each function below owns one component that is currently
-   rendered as static markup with a plain fade-in. When the
+   rendered as static markup with a scroll-triggered reveal. When the
    "live terminal" pass happens (ticking numbers, typing cursor,
    code-block reveals), replace only the body of the matching
    function — the HTML hooks (data-widget / data-role-index /
@@ -34,24 +35,50 @@ function initHeroWidget() {
 }
 
 /**
+ * Shared scroll-reveal: staggers [data-fade] elements matching
+ * `selector` into view via IntersectionObserver, one CSS custom
+ * property per element to drive the transition-delay in style.css.
+ * Respects prefers-reduced-motion by skipping the observer and
+ * showing everything immediately.
+ */
+function revealOnScroll(selector, staggerMs) {
+  const items = document.querySelectorAll(selector);
+  if (!items.length) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  items.forEach((el, i) => {
+    el.style.setProperty('--reveal-delay', `${i * staggerMs}ms`);
+    if (reduceMotion) el.classList.add('is-visible');
+  });
+  if (reduceMotion) return;
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+
+  items.forEach(el => observer.observe(el));
+}
+
+/**
  * Experience timeline — [data-widget="experience-timeline"],
  * entries tagged [data-role-index].
- * Today: markup is rendered server-side (static HTML), this is a
- * no-op placeholder.
- * Future: could stagger-reveal each .timeline-entry on scroll, or
- * type out bullet text line-by-line, keyed off data-role-index.
+ * Stagger-reveals each .timeline-entry as it scrolls into view.
  */
 function renderExperience() {
-  // Intentional no-op for now — entries are static in index.html.
+  revealOnScroll('[data-role-index]', 90);
 }
 
 /**
  * Skills grid — [data-widget="skills-grid"], groups tagged
  * [data-skill-category].
- * Today: static tag lists, no-op placeholder.
- * Future: could animate proficiency bars or tick a skill-count
- * summary per category, keyed off data-skill-category.
+ * Stagger-reveals each .skill-group as it scrolls into view.
  */
 function initSkillsWidget() {
-  // Intentional no-op for now — tags are static in index.html.
+  revealOnScroll('[data-skill-category]', 70);
 }

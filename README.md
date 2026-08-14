@@ -8,7 +8,8 @@ external dependencies (fonts, JS, CSS all self-contained).
 ```
 index.html              Single-page site (hero, about, skills, experience, education, contact)
 assets/css/style.css     All styling (dark/amber, monospace, §-numbered sections)
-assets/js/main.js        Fade-in-on-load + swappable widget stubs
+assets/js/main.js        Fade-in-on-load + scroll-reveal animations + swappable widget stubs
+assets/icons/            Technology icons for the skills grid (see ATTRIBUTION.md)
 assets/resume/           Resume PDF (see TODO below)
 assets/favicon.svg       Site favicon
 ```
@@ -48,8 +49,10 @@ Then visit `http://localhost:8000`.
 
 The hero, experience timeline, and skills grid are intentionally built as
 static-but-swappable components (`data-widget` / `data-role-index` /
-`data-skill-category` attributes in `index.html`, matching stub functions in
-`assets/js/main.js`). To add ticking stats, a typing cursor, or code-block
-reveals later, only the bodies of `initHeroWidget()`, `renderExperience()`,
-and `initSkillsWidget()` in `main.js` need to change — no HTML restructuring
-required.
+`data-skill-category` attributes in `index.html`, matching functions in
+`assets/js/main.js`). Today, `renderExperience()` and `initSkillsWidget()`
+stagger-reveal their sections on scroll via a shared `revealOnScroll()`
+IntersectionObserver helper (respects `prefers-reduced-motion`). To add
+ticking stats, a typing cursor, or code-block reveals later, only the bodies
+of `initHeroWidget()`, `renderExperience()`, and `initSkillsWidget()` in
+`main.js` need to change — no HTML restructuring required.
