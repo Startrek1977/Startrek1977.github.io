@@ -258,7 +258,7 @@ section:last-of-type {
   justify-content: center;
   width: 40px;
   height: 40px;
-  border: 1px solid var(--border-strong);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text-dim);
   transition: color 0.15s ease, border-color 0.15s ease;
@@ -287,15 +287,15 @@ section:last-of-type {
   padding: 0.7rem 1.25rem;
   border-radius: var(--radius);
   border: 1px solid var(--accent);
-  color: var(--accent);
-  background: transparent;
+  color: #0b0c0e;
+  background: var(--accent);
   cursor: pointer;
 }
 
 .btn:hover,
 .btn:focus-visible {
-  background: var(--accent);
-  color: #0b0c0e;
+  background: transparent;
+  color: var(--accent);
   text-decoration: none;
 }
 
