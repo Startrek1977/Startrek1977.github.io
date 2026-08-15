@@ -87,6 +87,7 @@ a:focus-visible {
   top: 0;
   z-index: 50;
   background: rgba(11, 12, 14, 0.9);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
 }
@@ -114,6 +115,7 @@ a:focus-visible {
 
 .site-nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 1.5rem;
 }
 
@@ -121,6 +123,7 @@ a:focus-visible {
   font-family: var(--mono-font);
   font-size: 0.85rem;
   color: var(--text-dim);
+  padding: 0.5rem 0.25rem;
 }
 
 .site-nav a:hover,
@@ -580,6 +583,11 @@ section:last-of-type {
   flex-shrink: 0;
 }
 
+.contact-list li > *:not(.contact-label) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .contact-list a {
   color: var(--text);
 }
@@ -623,9 +631,36 @@ section:last-of-type {
 }
 
 @media (max-width: 600px) {
-  #skills { contain-intrinsic-size: auto 2400px; }
-  #experience { contain-intrinsic-size: auto 3300px; }
-  #education { contain-intrinsic-size: auto 1200px; }
+  #skills { contain-intrinsic-size: auto 2350px; }
+  #experience { contain-intrinsic-size: auto 3250px; }
+  #education { contain-intrinsic-size: auto 1150px; }
+}
+
+/* ---- Mobile spacing/type ---- */
+
+@media (max-width: 600px) {
+  section {
+    padding: 3rem 0;
+  }
+
+  .hero {
+    padding: 4rem 0 3rem;
+  }
+
+  .hero-avatar {
+    width: 96px;
+    height: 96px;
+    font-size: 1.9rem;
+  }
+
+  .skill-tags li {
+    font-size: 0.85rem;
+  }
+
+  .skills-grid,
+  .edu-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---- Reduced motion ---- */
