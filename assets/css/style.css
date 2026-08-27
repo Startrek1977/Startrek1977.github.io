@@ -124,12 +124,19 @@ a:focus-visible {
   font-size: 0.85rem;
   color: var(--text-dim);
   padding: 0.5rem 0.25rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .site-nav a:hover,
 .site-nav a:focus-visible {
   color: var(--accent);
   text-decoration: none;
+}
+
+.site-nav a.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
 }
 
 @media (max-width: 640px) {
@@ -146,6 +153,13 @@ a:focus-visible {
 section {
   padding: 5rem 0;
   border-bottom: 1px solid var(--border);
+}
+
+/* Keeps anchor-scrolled headings clear of the sticky header; --header-h
+   is kept in sync with the header's real (possibly multi-line) rendered
+   height by syncHeaderHeight() in main.js. */
+section[id] {
+  scroll-margin-top: var(--header-h, 84px);
 }
 
 section:last-of-type {
@@ -195,19 +209,19 @@ section:last-of-type {
 
 .hero-avatar {
   flex-shrink: 0;
-  width: 128px;
-  height: 128px;
+  width: 148px;
+  height: 148px;
   border-radius: 50%;
   border: 2px solid var(--accent);
   background: var(--accent-bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--mono-font);
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: var(--accent);
+  overflow: hidden;
   box-shadow: 0 0 0 6px rgba(245, 182, 66, 0.04);
+}
+
+.hero-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .hero-text {
@@ -252,7 +266,7 @@ section:last-of-type {
 
 .hero-links {
   display: flex;
-  gap: 0.9rem;
+  gap: 1rem;
 }
 
 .icon-link {
@@ -264,7 +278,7 @@ section:last-of-type {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: var(--text-dim);
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
 .icon-link:hover,
@@ -272,6 +286,7 @@ section:last-of-type {
   color: var(--accent);
   border-color: var(--accent);
   text-decoration: none;
+  transform: translateY(-1px);
 }
 
 .icon-link svg {
@@ -293,6 +308,13 @@ section:last-of-type {
   color: #0b0c0e;
   background: var(--accent);
   cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
 }
 
 .btn:hover,
@@ -300,6 +322,8 @@ section:last-of-type {
   background: transparent;
   color: var(--accent);
   text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(245, 182, 66, 0.25);
 }
 
 @media (max-width: 720px) {
@@ -575,6 +599,7 @@ section:last-of-type {
   border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   padding: 0.85rem 1.4rem;
+  transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .github-cta svg {
@@ -588,6 +613,7 @@ section:last-of-type {
   border-color: var(--accent);
   color: var(--accent);
   text-decoration: none;
+  transform: translateY(-1px);
 }
 
 /* ---- Contact ---- */
@@ -679,9 +705,8 @@ section:last-of-type {
   }
 
   .hero-avatar {
-    width: 96px;
-    height: 96px;
-    font-size: 1.9rem;
+    width: 108px;
+    height: 108px;
   }
 
   .skill-tags li {

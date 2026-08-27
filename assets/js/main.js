@@ -8,7 +8,50 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroWidget();
   renderExperience();
   initSkillsWidget();
+  syncHeaderHeight();
+  initActiveNavHighlight();
 });
+
+/**
+ * Keeps a `--header-h` custom property in sync with the sticky header's
+ * real rendered height (it wraps to multiple lines on narrow viewports),
+ * so section `scroll-margin-top` in style.css never guesses a fixed value.
+ */
+function syncHeaderHeight() {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+
+  const setVar = () => {
+    document.documentElement.style.setProperty('--header-h', `${header.getBoundingClientRect().height + 12}px`);
+  };
+
+  setVar();
+  window.addEventListener('resize', setVar);
+}
+
+/**
+ * Highlights the nav link for whichever section is currently in view,
+ * via one IntersectionObserver watching every anchored <section>.
+ */
+function initActiveNavHighlight() {
+  const sections = document.querySelectorAll('main section[id]');
+  const navLinks = document.querySelectorAll('.site-nav a[href^="#"]');
+  if (!sections.length || !navLinks.length) return;
+
+  const linkByTarget = new Map();
+  navLinks.forEach(link => linkByTarget.set(link.getAttribute('href').slice(1), link));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const link = linkByTarget.get(entry.target.id);
+      if (!link || !entry.isIntersecting) return;
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+
+  sections.forEach(section => observer.observe(section));
+}
 
 /* ============================================================
    SWAPPABLE WIDGETS (future: live terminal effects)
